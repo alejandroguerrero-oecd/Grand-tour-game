@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>The Grand Tour</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --parchment: #f4e4c1;
+            --parchment-dark: #e8d4a8;
+            --sepia: #704214;
+            --sepia-light: #8b5a2b;
+            --ink: #2c1810;
+            --ink-light: #4a3728;
+            --gold: #c9a227;
+            --gold-dark: #96750a;
+            --crimson: #8b1a1a;
+            --prussian: #1a3a5c;
+            --stat-purse: #c9a227;
+            --stat-reputation: #8b1a1a;
+            --stat-health: #2d5a27;
+            --stat-knowledge: #1a3a5c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
+            background: var(--parchment);
+            color: var(--ink);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+                linear-gradient(to bottom, var(--parchment) 0%, var(--parchment-dark) 100%);
+        }
+
+        #game-container {
+            width: 100%;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 800px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border-left: 1px solid var(--sepia-light);
+            border-right: 1px solid var(--sepia-light);
+            box-shadow: 0 0 60px rgba(112, 66, 20, 0.2);
+        }
+
+        /* Header */
+        #header {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 2px solid var(--sepia);
+            background: linear-gradient(to bottom, var(--parchment), var(--parchment-dark));
+            position: relative;
+        }
+
+        #header::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 15px;
+            background: var(--parchment);
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            border-bottom: 2px solid var(--sepia);
+        }
+
+        .title-ornament {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 10px;
+            letter-spacing: 6px;
+            color: var(--sepia-light);
+            text-transform: uppercase;
+        }
+
+        #game-title {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--sepia);
+            letter-spacing: 3px;
+            margin: 4px 0;
+            text-shadow: 1px 1px 0 var(--parchment);
+        }
+
+        #location-display {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 14px;
+            font-style: italic;
+            color: var(--ink-light);
+        }
+
+        /* Stats Panel */
+        #stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--parchment-dark);
+            border-bottom: 1px solid var(--sepia-light);
+        }
+
+        .stat-box {
+            text-align: center;
+            position: relative;
+        }
+
+        .stat-icon {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .stat-label {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--ink-light);
+            display: block;
+        }
+
+        .stat-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.15);
+            border-radius: 3px;
+            margin-top: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .stat-bar {
+            height: 100%;
+            transition: width 0.5s ease, background-color 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .stat-bar.purse { background: var(--stat-purse); }
+        .stat-bar.reputation { background: var(--stat-reputation); }
+        .stat-bar.health { background: var(--stat-health); }
+        .stat-bar.knowledge { background: var(--stat-knowledge); }
+
+        .stat-box.warning .stat-bar {
+            animation: pulse-warning 0.5s ease infinite alternate;
+        }
+
+        @keyframes pulse-warning {
+            from { opacity: 1; }
+            to { opacity: 0.5; }
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-top: 2px;
+        }
+
+        /* Card Area */
+        #card-area {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .choice-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            max-width: 80px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .choice-indicator.left {
+            left: 8px;
+            background: rgba(139, 26, 26, 0.1);
+            border: 1px solid var(--crimson);
+            color: var(--crimson);
+        }
+
+        .choice-indicator.right {
+            right: 8px;
+            background: rgba(26, 58, 92, 0.1);
+            border: 1px solid var(--prussian);
+            color: var(--prussian);
+        }
+
+        .choice-indicator.show {
+            opacity: 1;
+        }
+
+        /* Card */
+        .card {
+            width: 100%;
+            max-width: 320px;
+            background: var(--parchment);
+            border: 3px solid var(--sepia);
+            border-radius: 8px;
+            box-shadow: 
+                0 4px 20px rgba(44, 24, 16, 0.2),
+                inset 0 0 40px rgba(112, 66, 20, 0.05);
+            position: relative;
+            cursor: grab;
+            user-select: none;
+            touch-action: pan-y;
+            transition: transform 0.1s ease;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 1px solid var(--sepia-light);
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .card-header {
+            padding: 16px 20px 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--sepia-light);
+        }
+
+        .card-week {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--sepia-light);
+        }
+
+        .card-character {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--sepia);
+            margin-top: 4px;
+        }
+
+        .card-illustration {
+            height: 140px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to bottom, 
+                rgba(112, 66, 20, 0.03) 0%, 
+                rgba(112, 66, 20, 0.08) 100%);
+            border-bottom: 1px solid var(--sepia-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-illustration svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-body {
+            padding: 16px 20px;
+        }
+
+        .card-dialogue {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--ink);
+            font-style: italic;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-footer {
+            padding: 12px 20px 16px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--sepia-light);
+        }
+
+        .choice-option {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 12px;
+            color: var(--ink-light);
+            max-width: 45%;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .choice-option.left::before {
+            content: '← ';
+            color: var(--crimson);
+        }
+
+        .choice-option.right::after {
+            content: ' →';
+            color: var(--prussian);
+        }
+
+        /* Controls */
+        #controls {
+            padding: 12px 16px;
+            text-align: center;
+            border-top: 1px solid var(--sepia-light);
+            background: var(--parchment-dark);
+        }
+
+        .control-hint {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 12px;
+            font-style: italic;
+            color: var(--ink-light);
+        }
+
+        .week-display {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 11px;
+            color: var(--sepia);
+            margin-top: 4px;
+            letter-spacing: 2px;
+        }
+
+        /* Sound Toggle */
+        #sound-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--parchment-dark);
+            border: 1px solid var(--sepia-light);
+            color: var(--sepia);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        #sound-toggle:hover {
+            background: var(--sepia-light);
+            color: var(--parchment);
+        }
+
+        /* Screens */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--parchment);
+            z-index: 200;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .screen.show {
+            display: flex;
+        }
+
+        /* Title Screen */
+        #title-screen {
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+                linear-gradient(to bottom, var(--parchment) 0%, var(--parchment-dark) 100%);
+        }
+
+        .title-crest {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .main-title {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--sepia);
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 0 var(--parchment);
+        }
+
+        .subtitle {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+            color: var(--ink-light);
+            margin-bottom: 30px;
+        }
+
+        .title-description {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--ink);
+            max-width: 300px;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--parchment);
+            background: var(--sepia);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(44, 24, 16, 0.3);
+        }
+
+        .start-btn:hover {
+            background: var(--ink);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 24, 16, 0.4);
+        }
+
+        /* Character Select */
+        #character-screen .character-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 300px;
+            margin: 20px 0;
+        }
+
+        .character-btn {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 15px;
+            color: var(--ink);
+            background: var(--parchment);
+            border: 2px solid var(--sepia-light);
+            padding: 14px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .character-btn:hover {
+            border-color: var(--sepia);
+            background: var(--parchment-dark);
+        }
+
+        .character-btn .char-name {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--sepia);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .character-btn .char-desc {
+            font-size: 12px;
+            color: var(--ink-light);
+            font-style: italic;
+        }
+
+        /* Game Over Screen */
+        #gameover-screen {
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E"),
+                linear-gradient(to bottom, var(--parchment) 0%, var(--parchment-dark) 100%);
+        }
+
+        .gameover-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .gameover-title {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--sepia);
+            margin-bottom: 12px;
+        }
+
+        .gameover-reason {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 16px;
+            font-style: italic;
+            color: var(--ink);
+            max-width: 280px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .gameover-stats {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 13px;
+            color: var(--ink-light);
+            margin-bottom: 24px;
+        }
+
+        .cabinet-summary {
+            background: var(--parchment-dark);
+            border: 1px solid var(--sepia-light);
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            max-width: 280px;
+        }
+
+        .cabinet-title {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--sepia);
+            margin-bottom: 8px;
+        }
+
+        .cabinet-items {
+            font-family: 'IM Fell English', 'Times New Roman', Georgia, serif;
+            font-size: 13px;
+            color: var(--ink);
+            font-style: italic;
+        }
+
+        .restart-btn {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--parchment);
+            background: var(--sepia);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .restart-btn:hover {
+            background: var(--ink);
+        }
+
+        /* Chapter Complete */
+        #chapter-complete {
+            background: var(--parchment);
+        }
+
+        .chapter-complete-title {
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 20px;
+            color: var(--sepia);
+            margin-bottom: 20px;
+        }
+
+        /* Stat Change Indicator */
+        .stat-change {
+            position: fixed;
+            font-family: 'Cinzel', 'Times New Roman', serif;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            pointer-events: none;
+            animation: floatUp 1.5s ease forwards;
+            z-index: 300;
+        }
+
+        .stat-change.positive {
+            color: var(--stat-health);
+        }
+
+        .stat-change.negative {
+            color: var(--crimson);
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+
+        /* Card animations */
+        .card.swiping-left {
+            animation: swipeLeft 0.4s ease forwards;
+        }
+
+        .card.swiping-right {
+            animation: swipeRight 0.4s ease forwards;
+        }
+
+        @keyframes swipeLeft {
+            to {
+                transform: translateX(-150%) rotate(-20deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes swipeRight {
+            to {
+                transform: translateX(150%) rotate(20deg);
+                opacity: 0;
+            }
+        }
+
+        .card.entering {
+            animation: cardEnter 0.4s ease forwards;
+        }
+
+        @keyframes cardEnter {
+            from {
+                transform: translateY(50px) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-height: 700px) {
+            .card-illustration {
+                height: 100px;
+            }
+            .card-dialogue {
+                min-height: 60px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <button id="sound-toggle" onclick="toggleSound()">🔊</button>
+
+        <!-- Title Screen -->
+        <div id="title-screen" class="screen show">
+            <svg class="title-crest" viewBox="0 0 120 120">
+                <!-- Decorative crest with classical motifs -->
+                <defs>
+                    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#c9a227"/>
+                        <stop offset="50%" style="stop-color:#e8c547"/>
+                        <stop offset="100%" style="stop-color:#96750a"/>
+                    </linearGradient>
+                </defs>
+                <ellipse cx="60" cy="60" rx="55" ry="55" fill="none" stroke="#704214" stroke-width="2"/>
+                <ellipse cx="60" cy="60" rx="48" ry="48" fill="none" stroke="#704214" stroke-width="1"/>
+                <!-- Compass rose / classical motif -->
+                <path d="M60 15 L65 55 L60 60 L55 55 Z" fill="url(#goldGrad)"/>
+                <path d="M60 105 L55 65 L60 60 L65 65 Z" fill="url(#goldGrad)"/>
+                <path d="M15 60 L55 55 L60 60 L55 65 Z" fill="url(#goldGrad)"/>
+                <path d="M105 60 L65 65 L60 60 L65 55 Z" fill="url(#goldGrad)"/>
+                <!-- Diagonal points -->
+                <path d="M28 28 L55 55 L52 58 L25 31 Z" fill="#8b5a2b" opacity="0.7"/>
+                <path d="M92 28 L65 55 L68 58 L95 31 Z" fill="#8b5a2b" opacity="0.7"/>
+                <path d="M28 92 L55 65 L58 68 L31 95 Z" fill="#8b5a2b" opacity="0.7"/>
+                <path d="M92 92 L65 65 L62 68 L89 95 Z" fill="#8b5a2b" opacity="0.7"/>
+                <!-- Center ornament -->
+                <circle cx="60" cy="60" r="8" fill="none" stroke="#704214" stroke-width="1.5"/>
+                <circle cx="60" cy="60" r="3" fill="#704214"/>
+                <!-- Roman numeral for chapter -->
+                <text x="60" y="95" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#704214">MDCCLX</text>
+            </svg>
+            <h1 class="main-title">THE GRAND TOUR</h1>
+            <p class="subtitle">An Enlightenment Adventure</p>
+            <p class="title-description">
+                The year is 1760. You stand at the threshold of the journey that shall define your life—the Grand Tour through the classical lands of Europe. Navigate courts, ruins, and salons. Balance your purse, reputation, health, and knowledge. Return transformed—or not at all.
+            </p>
+            <button class="start-btn" onclick="showCharacterSelect()">Begin Your Journey</button>
+        </div>
+
+        <!-- Character Select -->
+        <div id="character-screen" class="screen">
+            <p class="title-ornament">— Choose Your Path —</p>
+            <h2 style="font-family: 'Cinzel', 'Times New Roman', serif; font-size: 20px; color: var(--sepia); margin: 16px 0;">The Traveller</h2>
+            <div class="character-options">
+                <button class="character-btn" onclick="selectCharacter('aristocrat')">
+                    <span class="char-name">The Young Aristocrat</span>
+                    <span class="char-desc">Ample purse, modest knowledge. Your family expects a conventional tour.</span>
+                </button>
+                <button class="character-btn" onclick="selectCharacter('scholar')">
+                    <span class="char-name">The Impecunious Scholar</span>
+                    <span class="char-desc">Keen mind, thin purse. You travel on a patron's uncertain favour.</span>
+                </button>
+                <button class="character-btn" onclick="selectCharacter('widow')">
+                    <span class="char-name">The Learned Widow</span>
+                    <span class="char-desc">Independent means, unconventional path. Society watches with interest.</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Game -->
+        <div id="game-screen" style="display: none; flex-direction: column; height: 100%;">
+            <div id="header">
+                <p class="title-ornament">— The Grand Tour —</p>
+                <h1 id="game-title">ROMA</h1>
+                <p id="location-display">The Eternal City</p>
+            </div>
+
+            <div id="stats-panel">
+                <div class="stat-box" id="stat-purse">
+                    <span class="stat-icon">💰</span>
+                    <span class="stat-label">Purse</span>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar purse" id="purse-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="stat-value" id="purse-value">50</span>
+                </div>
+                <div class="stat-box" id="stat-reputation">
+                    <span class="stat-icon">👑</span>
+                    <span class="stat-label">Repute</span>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar reputation" id="reputation-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="stat-value" id="reputation-value">50</span>
+                </div>
+                <div class="stat-box" id="stat-health">
+                    <span class="stat-icon">❤️</span>
+                    <span class="stat-label">Health</span>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar health" id="health-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="stat-value" id="health-value">50</span>
+                </div>
+                <div class="stat-box" id="stat-knowledge">
+                    <span class="stat-icon">📚</span>
+                    <span class="stat-label">Wisdom</span>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar knowledge" id="knowledge-bar" style="width: 50%"></div>
+                    </div>
+                    <span class="stat-value" id="knowledge-value">50</span>
+                </div>
+            </div>
+
+            <div id="card-area">
+                <div class="choice-indicator left" id="left-indicator"></div>
+                <div class="choice-indicator right" id="right-indicator"></div>
+                <div class="card" id="game-card">
+                    <div class="card-header">
+                        <p class="card-week">Week I</p>
+                        <p class="card-character">Your Arrival</p>
+                    </div>
+                    <div class="card-illustration" id="card-illustration">
+                        <!-- SVG illustration inserted here -->
+                    </div>
+                    <div class="card-body">
+                        <p class="card-dialogue" id="card-dialogue">
+                            "The carriage rattles through the Porta del Popolo. Rome sprawls before you, ancient and eternal."
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="choice-option left" id="left-choice">Seek lodgings</span>
+                        <span class="choice-option right" id="right-choice">Visit St Peter's</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="controls">
+                <p class="control-hint">Swipe or tap left / right to decide</p>
+                <p class="week-display">Week <span id="week-count">1</span> of 12 · Rome</p>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen">
+            <span class="gameover-icon" id="gameover-icon">📜</span>
+            <h2 class="gameover-title" id="gameover-title">Your Tour Concludes</h2>
+            <p class="gameover-reason" id="gameover-reason">
+                The journey ends as all journeys must...
+            </p>
+            <div class="cabinet-summary" id="cabinet-summary">
+                <p class="cabinet-title">Your Cabinet of Curiosities</p>
+                <p class="cabinet-items" id="cabinet-items">Empty</p>
+            </div>
+            <p class="gameover-stats" id="gameover-stats">
+                Survived 0 weeks · Visited Rome
+            </p>
+            <button class="restart-btn" onclick="restartGame()">Begin Anew</button>
+        </div>
+
+        <!-- Chapter Complete -->
+        <div id="chapter-complete" class="screen">
+            <span class="gameover-icon">🏛️</span>
+            <h2 class="chapter-complete-title">Chapter I Complete</h2>
+            <p class="gameover-reason">
+                You have survived Rome. The roads north beckon—Florence, Venice, and beyond await in the full game.
+            </p>
+            <div class="cabinet-summary">
+                <p class="cabinet-title">Acquisitions from Rome</p>
+                <p class="cabinet-items" id="rome-acquisitions">None yet</p>
+            </div>
+            <p class="gameover-stats" id="chapter-stats">
+                Final standing in Rome
+            </p>
+            <button class="restart-btn" onclick="restartGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // AUDIO SYSTEM (Mobile-safe)
+        // ============================================
+        var AudioSystem = {
+            ctx: null,
+            enabled: true,
+            initialized: false,
+            musicTimeout: null,
+
+            // Only init on user interaction
+            init() {
+                if (this.initialized) return true;
+                try {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (!AudioContext) {
+                        console.log('Web Audio not supported');
+                        return false;
+                    }
+                    this.ctx = new AudioContext();
+                    this.initialized = true;
+                    console.log('Audio initialized');
+                    return true;
+                } catch (e) {
+                    console.log('Audio init failed:', e);
+                    return false;
+                }
+            },
+
+            resume() {
+                try {
+                    if (this.ctx && this.ctx.state === 'suspended') {
+                        this.ctx.resume();
+                    }
+                } catch (e) {
+                    console.log('Audio resume failed:', e);
+                }
+            },
+
+            // Harpsichord-like pluck sound
+            playNote(freq, duration, volume) {
+                if (!this.enabled || !this.ctx) return;
+                
+                try {
+                    this.resume();
+                    
+                    duration = duration || 0.3;
+                    volume = volume || 0.15;
+
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    const filter = this.ctx.createBiquadFilter();
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.value = freq;
+
+                    filter.type = 'lowpass';
+                    filter.frequency.value = 2000;
+                    filter.Q.value = 2;
+
+                    const now = this.ctx.currentTime;
+                    gain.gain.setValueAtTime(volume, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+                    osc.connect(filter);
+                    filter.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + duration);
+                } catch (e) {
+                    console.log('playNote error:', e);
+                }
+            },
+
+            playSwipeLeft() {
+                if (!this.enabled || !this.initialized) return;
+                var self = this;
+                this.playNote(392, 0.15, 0.12);
+                setTimeout(function() { self.playNote(330, 0.15, 0.10); }, 50);
+                setTimeout(function() { self.playNote(294, 0.2, 0.08); }, 100);
+            },
+
+            playSwipeRight() {
+                if (!this.enabled || !this.initialized) return;
+                var self = this;
+                this.playNote(392, 0.15, 0.12);
+                setTimeout(function() { self.playNote(494, 0.15, 0.10); }, 50);
+                setTimeout(function() { self.playNote(587, 0.2, 0.08); }, 100);
+            },
+
+            playGameOver() {
+                if (!this.enabled || !this.initialized) return;
+                var notes = [392, 370, 330, 294, 262];
+                var self = this;
+                notes.forEach(function(freq, i) {
+                    setTimeout(function() { self.playNote(freq, 0.4, 0.12); }, i * 200);
+                });
+            },
+
+            playVictory() {
+                if (!this.enabled || !this.initialized) return;
+                var notes = [392, 440, 494, 523, 587, 659];
+                var self = this;
+                notes.forEach(function(freq, i) {
+                    setTimeout(function() { self.playNote(freq, 0.25, 0.12); }, i * 120);
+                });
+            },
+
+            startMusic() {
+                if (!this.enabled || !this.initialized) return;
+                this.stopMusic();
+
+                var baseNotes = [
+                    196, 247, 294, 330, 392, 330, 294, 247,
+                    220, 277, 330, 370, 440, 370, 330, 277,
+                    185, 233, 277, 330, 370, 330, 277, 233,
+                    196, 247, 294, 370, 392, 370, 294, 247
+                ];
+
+                var noteIndex = 0;
+                var self = this;
+                
+                function playNext() {
+                    if (!self.enabled || !self.initialized) return;
+                    
+                    var freq = baseNotes[noteIndex % baseNotes.length];
+                    self.playNote(freq, 1.2, 0.06);
+                    noteIndex++;
+                    
+                    var delay = 800 + Math.random() * 400;
+                    self.musicTimeout = setTimeout(playNext, delay);
+                }
+
+                this.musicTimeout = setTimeout(playNext, 500);
+            },
+
+            stopMusic() {
+                if (this.musicTimeout) {
+                    clearTimeout(this.musicTimeout);
+                    this.musicTimeout = null;
+                }
+            },
+
+            toggle() {
+                this.enabled = !this.enabled;
+                if (this.enabled && this.initialized) {
+                    this.startMusic();
+                } else {
+                    this.stopMusic();
+                }
+                return this.enabled;
+            }
+        };
+
+        function toggleSound() {
+            // Init on first user interaction
+            if (!AudioSystem.initialized) {
+                AudioSystem.init();
+            }
+            var enabled = AudioSystem.toggle();
+            document.getElementById('sound-toggle').textContent = enabled ? '🔊' : '🔇';
+        }
+
+        // ============================================
+        // GAME STATE
+        // ============================================
+        var GameState = {
+            character: null,
+            week: 1,
+            maxWeeks: 12,
+            currentCity: 'rome',
+            stats: {
+                purse: 50,
+                reputation: 50,
+                health: 50,
+                knowledge: 50
+            },
+            cabinet: [], // Collected items
+            usedCards: [],
+            currentCardIndex: 0
+        };
+
+        // Character presets
+        var Characters = {
+            aristocrat: {
+                name: 'Young Aristocrat',
+                stats: { purse: 70, reputation: 60, health: 50, knowledge: 30 }
+            },
+            scholar: {
+                name: 'Impecunious Scholar',
+                stats: { purse: 25, reputation: 40, health: 50, knowledge: 70 }
+            },
+            widow: {
+                name: 'Learned Widow',
+                stats: { purse: 55, reputation: 45, health: 45, knowledge: 55 }
+            }
+        };
+
+        // ============================================
+        // CARD ILLUSTRATIONS (SVG)
+        // ============================================
+        var Illustrations = {
+            default: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Roman column -->
+                    <rect x="140" y="40" width="40" height="80" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="135" y="35" width="50" height="8" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="135" y="117" width="50" height="8" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Decorative lines -->
+                    <line x1="145" y1="45" x2="145" y2="115" stroke="#8b5a2b" stroke-width="0.5"/>
+                    <line x1="155" y1="45" x2="155" y2="115" stroke="#8b5a2b" stroke-width="0.5"/>
+                    <line x1="165" y1="45" x2="165" y2="115" stroke="#8b5a2b" stroke-width="0.5"/>
+                    <line x1="175" y1="45" x2="175" y2="115" stroke="#8b5a2b" stroke-width="0.5"/>
+                </svg>`,
+            
+            cardinal: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Cardinal figure -->
+                    <circle cx="160" cy="45" r="18" fill="none" stroke="#8b1a1a" stroke-width="1.5"/>
+                    <path d="M160 27 L155 15 L160 18 L165 15 Z" fill="#8b1a1a"/> <!-- Biretta hint -->
+                    <path d="M142 63 Q160 58 178 63 L185 120 L135 120 Z" fill="none" stroke="#8b1a1a" stroke-width="1.5"/>
+                    <!-- Cross -->
+                    <line x1="160" y1="70" x2="160" y2="100" stroke="#c9a227" stroke-width="2"/>
+                    <line x1="150" y1="80" x2="170" y2="80" stroke="#c9a227" stroke-width="2"/>
+                </svg>`,
+            
+            ruins: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Broken columns -->
+                    <rect x="80" y="50" width="25" height="70" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="75" y="45" width="35" height="6" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="130" y="70" width="25" height="50" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <path d="M125 65 L160 65 L155 70 L130 70 Z" fill="none" stroke="#704214" stroke-width="1"/>
+                    <rect x="180" y="40" width="25" height="80" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="175" y="35" width="35" height="6" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="230" y="60" width="25" height="60" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Ground line -->
+                    <line x1="50" y1="120" x2="270" y2="120" stroke="#8b5a2b" stroke-width="1"/>
+                </svg>`,
+            
+            salon: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Chandelier -->
+                    <ellipse cx="160" cy="25" rx="40" ry="8" fill="none" stroke="#c9a227" stroke-width="1"/>
+                    <line x1="120" y1="25" x2="125" y2="40" stroke="#c9a227" stroke-width="0.5"/>
+                    <line x1="200" y1="25" x2="195" y2="40" stroke="#c9a227" stroke-width="0.5"/>
+                    <line x1="160" y1="25" x2="160" y2="45" stroke="#c9a227" stroke-width="0.5"/>
+                    <!-- Figures in conversation -->
+                    <ellipse cx="100" cy="70" rx="12" ry="15" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <path d="M88 85 Q100 90 112 85 L120 125 L80 125 Z" fill="none" stroke="#704214" stroke-width="1"/>
+                    <ellipse cx="160" cy="75" rx="10" ry="12" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <path d="M150 87 Q160 92 170 87 L175 125 L145 125 Z" fill="none" stroke="#704214" stroke-width="1"/>
+                    <ellipse cx="220" cy="68" rx="12" ry="15" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <path d="M208 83 Q220 88 232 83 L240 125 L200 125 Z" fill="none" stroke="#704214" stroke-width="1"/>
+                </svg>`,
+            
+            antiquarian: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Bust on pedestal -->
+                    <rect x="90" y="90" width="40" height="30" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <ellipse cx="110" cy="70" rx="18" ry="22" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Vase -->
+                    <ellipse cx="200" cy="110" rx="20" ry="8" fill="none" stroke="#704214" stroke-width="1"/>
+                    <path d="M180 110 Q180 70 200 60 Q220 70 220 110" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <ellipse cx="200" cy="60" rx="12" ry="4" fill="none" stroke="#704214" stroke-width="1"/>
+                    <!-- Coins/medallions -->
+                    <circle cx="260" cy="100" r="12" fill="none" stroke="#c9a227" stroke-width="1.5"/>
+                    <circle cx="260" cy="100" r="8" fill="none" stroke="#c9a227" stroke-width="0.5"/>
+                </svg>`,
+            
+            tomb: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Sarcophagus -->
+                    <rect x="100" y="70" width="120" height="45" fill="none" stroke="#704214" stroke-width="2"/>
+                    <rect x="95" y="65" width="130" height="8" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="95" y="112" width="130" height="8" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Inscription -->
+                    <text x="160" y="95" text-anchor="middle" font-family="'IM Fell English', serif" font-size="10" font-style="italic" fill="#704214">ET IN ARCADIA EGO</text>
+                    <!-- Cypress trees -->
+                    <path d="M60 120 L70 40 L80 120 Z" fill="none" stroke="#2d5a27" stroke-width="1"/>
+                    <path d="M250 120 L260 50 L270 120 Z" fill="none" stroke="#2d5a27" stroke-width="1"/>
+                </svg>`,
+            
+            artist: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Easel -->
+                    <line x1="140" y1="30" x2="120" y2="120" stroke="#704214" stroke-width="1.5"/>
+                    <line x1="180" y1="30" x2="200" y2="120" stroke="#704214" stroke-width="1.5"/>
+                    <line x1="160" y1="25" x2="160" y2="50" stroke="#704214" stroke-width="1"/>
+                    <rect x="125" y="35" width="70" height="55" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Canvas content hint -->
+                    <rect x="135" y="45" width="50" height="35" fill="none" stroke="#8b5a2b" stroke-width="0.5"/>
+                    <!-- Palette -->
+                    <ellipse cx="250" cy="90" rx="25" ry="15" fill="none" stroke="#704214" stroke-width="1"/>
+                    <circle cx="240" cy="85" r="4" fill="none" stroke="#8b1a1a" stroke-width="1"/>
+                    <circle cx="255" cy="88" r="3" fill="none" stroke="#1a3a5c" stroke-width="1"/>
+                    <circle cx="250" cy="95" r="3" fill="none" stroke="#c9a227" stroke-width="1"/>
+                </svg>`,
+            
+            pope: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Papal figure -->
+                    <circle cx="160" cy="40" r="15" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Tiara -->
+                    <path d="M145 35 L160 15 L175 35" fill="none" stroke="#c9a227" stroke-width="1.5"/>
+                    <line x1="152" y1="28" x2="168" y2="28" stroke="#c9a227" stroke-width="1"/>
+                    <line x1="150" y1="33" x2="170" y2="33" stroke="#c9a227" stroke-width="1"/>
+                    <!-- Robes -->
+                    <path d="M145 55 Q160 50 175 55 L190 125 L130 125 Z" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Keys of St Peter -->
+                    <path d="M115 70 L100 90 M100 90 L95 85 M100 90 L105 85" stroke="#c9a227" stroke-width="1.5"/>
+                    <path d="M205 70 L220 90 M220 90 L215 85 M220 90 L225 85" stroke="#c9a227" stroke-width="1.5"/>
+                </svg>`,
+            
+            fever: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Bed -->
+                    <rect x="80" y="80" width="160" height="35" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <rect x="75" y="75" width="10" height="45" fill="none" stroke="#704214" stroke-width="1"/>
+                    <rect x="235" y="75" width="10" height="45" fill="none" stroke="#704214" stroke-width="1"/>
+                    <!-- Figure in bed -->
+                    <ellipse cx="130" cy="75" rx="20" ry="12" fill="none" stroke="#704214" stroke-width="1"/>
+                    <!-- Wavy fever lines -->
+                    <path d="M100 50 Q110 45 120 50 Q130 55 140 50" stroke="#8b1a1a" stroke-width="1" fill="none" opacity="0.6"/>
+                    <path d="M110 40 Q120 35 130 40 Q140 45 150 40" stroke="#8b1a1a" stroke-width="1" fill="none" opacity="0.4"/>
+                    <!-- Medicine bottle -->
+                    <rect x="250" y="85" width="15" height="25" fill="none" stroke="#704214" stroke-width="1"/>
+                    <rect x="253" y="80" width="9" height="6" fill="none" stroke="#704214" stroke-width="1"/>
+                </svg>`,
+            
+            stpeters: `
+                <svg viewBox="0 0 320 140" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="320" height="140" fill="none"/>
+                    <!-- Dome -->
+                    <ellipse cx="160" cy="55" rx="50" ry="35" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <line x1="160" y1="20" x2="160" y2="10" stroke="#704214" stroke-width="1.5"/>
+                    <line x1="155" y1="12" x2="165" y2="12" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Lantern -->
+                    <ellipse cx="160" cy="25" rx="12" ry="8" fill="none" stroke="#704214" stroke-width="1"/>
+                    <!-- Facade -->
+                    <rect x="90" y="85" width="140" height="35" fill="none" stroke="#704214" stroke-width="1.5"/>
+                    <!-- Columns -->
+                    <line x1="105" y1="85" x2="105" y2="120" stroke="#704214" stroke-width="1"/>
+                    <line x1="130" y1="85" x2="130" y2="120" stroke="#704214" stroke-width="1"/>
+                    <line x1="160" y1="85" x2="160" y2="120" stroke="#704214" stroke-width="1"/>
+                    <line x1="190" y1="85" x2="190" y2="120" stroke="#704214" stroke-width="1"/>
+                    <line x1="215" y1="85" x2="215" y2="120" stroke="#704214" stroke-width="1"/>
+                    <!-- Colonnade hints -->
+                    <path d="M50 125 Q90 110 90 120" fill="none" stroke="#8b5a2b" stroke-width="1"/>
+                    <path d="M270 125 Q230 110 230 120" fill="none" stroke="#8b5a2b" stroke-width="1"/>
+                </svg>`
+        };
+
+        // ============================================
+        // ROME CARDS
+        // ============================================
+        var RomeCards = [
+            {
+                id: 'arrival',
+                week: 1,
+                character: 'Your Arrival',
+                illustration: 'stpeters',
+                dialogue: '"The carriage rattles through the Porta del Popolo. Rome sprawls before you—ancient, eternal, and indifferent to your ambitions."',
+                leftChoice: 'Seek modest lodgings',
+                rightChoice: 'The finest inn',
+                leftEffects: { purse: 5, reputation: -5 },
+                rightEffects: { purse: -15, reputation: 10 },
+                leftText: 'You find rooms near the Piazza di Spagna. Economical, if somewhat damp.',
+                rightText: 'The Locanda dell\'Orso welcomes you. Your fellow guests include a Prussian count.',
+            },
+            {
+                id: 'cardinal_albani',
+                week: 2,
+                character: 'Cardinal Albani',
+                illustration: 'cardinal',
+                dialogue: '"I can arrange a private viewing of the Belvedere Apollo—but His Holiness expects a donation to the restoration of San Giovanni in Laterano."',
+                leftChoice: 'Politely decline',
+                rightChoice: 'Accept the arrangement',
+                leftEffects: { reputation: -5, knowledge: -10 },
+                rightEffects: { purse: -20, knowledge: 25, reputation: 15 },
+                leftText: 'The Cardinal\'s smile does not reach his eyes. Certain doors may now remain closed.',
+                rightText: 'The Apollo is more beautiful than any engraving suggested. You stand transfixed for an hour.',
+                rightItem: 'Sketch of the Belvedere Apollo'
+            },
+            {
+                id: 'english_tourists',
+                week: 2,
+                character: 'English Tourists',
+                illustration: 'salon',
+                dialogue: '"Lord Pemberton\'s party invites you to dine. They speak loudly of home and seem uninterested in Rome itself—but their connections are formidable."',
+                leftChoice: 'Decline gracefully',
+                rightChoice: 'Accept the invitation',
+                leftEffects: { reputation: -8, knowledge: 5 },
+                rightEffects: { purse: -10, reputation: 15, knowledge: -5 },
+                leftText: 'You spend the evening at a trattoria, conversing with a Florentine antiquarian. More edifying, if less advantageous.',
+                rightText: 'The roast beef is overcooked and the conversation duller still—but you secure letters of introduction to Venice.',
+            },
+            {
+                id: 'antiquarian_shop',
+                week: 3,
+                character: 'Signor Piranesi',
+                illustration: 'antiquarian',
+                dialogue: '"These etchings capture Rome as she truly is—magnificent in decay. I offer you the complete Vedute at a price reflecting our mutual appreciation of the sublime."',
+                leftChoice: 'Too dear for my purse',
+                rightChoice: 'A worthy investment',
+                leftEffects: { knowledge: -5 },
+                rightEffects: { purse: -25, knowledge: 20 },
+                leftText: 'Piranesi shrugs. "The English buy them faster than I can print them."',
+                rightText: 'The portfolio is heavy but magnificent. You will study these for years.',
+                rightItem: 'Piranesi\'s Vedute di Roma'
+            },
+            {
+                id: 'forum_guide',
+                week: 3,
+                character: 'A Cicerone',
+                illustration: 'ruins',
+                dialogue: '"I know every stone of the Forum, signore. For a modest fee, I shall reveal secrets no guidebook contains. Though some prefer to wander alone..."',
+                leftChoice: 'Explore independently',
+                rightChoice: 'Hire the guide',
+                leftEffects: { purse: 5, knowledge: 5, health: -5 },
+                rightEffects: { purse: -10, knowledge: 15 },
+                leftText: 'You scramble over ruins until dusk, twisting an ankle on a fallen capital. The solitude was worth it.',
+                rightText: 'Giovanni\'s knowledge is encyclopaedic. He shows you inscriptions invisible to casual visitors.',
+            },
+            {
+                id: 'papal_audience',
+                week: 4,
+                character: 'A Papal Secretary',
+                illustration: 'pope',
+                dialogue: '"His Holiness Clement XIII grants audiences on Thursdays. A presentation could be arranged—though the appropriate... acknowledgments... would be expected."',
+                leftChoice: 'The expense is prohibitive',
+                rightChoice: 'Arrange the audience',
+                leftEffects: { reputation: -10 },
+                rightEffects: { purse: -30, reputation: 30, knowledge: 10 },
+                leftText: 'You watch others ascend the Scala Regia. Perhaps another Pope, another journey.',
+                rightText: 'You kiss the Fisherman\'s Ring. Clement speaks briefly of antiquities. The moment is transcendent.',
+            },
+            {
+                id: 'roman_fever',
+                week: 5,
+                character: 'The Fever',
+                illustration: 'fever',
+                dialogue: '"The mal\'aria rises from the marshes in summer. You wake sweating, your head pounding. The English doctor recommends bleeding; the Italian suggests rest and broth."',
+                leftChoice: 'Trust the English doctor',
+                rightChoice: 'Follow Italian wisdom',
+                leftEffects: { purse: -15, health: -10 },
+                rightEffects: { purse: -5, health: 5, knowledge: 5 },
+                leftText: 'The bleeding weakens you further. Recovery takes three weeks.',
+                rightText: 'The broth is restorative. Within days you feel yourself again, wiser about Roman summers.',
+            },
+            {
+                id: 'arcadia_encounter',
+                week: 6,
+                character: 'A Mysterious Tomb',
+                illustration: 'tomb',
+                dialogue: '"In the Villa Doria Pamphilj gardens, you discover a sarcophagus bearing the inscription: ET IN ARCADIA EGO. A fellow visitor asks: \'What do you suppose it means?\'"',
+                leftChoice: '"Death speaks to us"',
+                rightChoice: '"A soul remembers paradise"',
+                leftEffects: { knowledge: 15, reputation: 5 },
+                rightEffects: { knowledge: 10, reputation: 10 },
+                leftText: '"Precisely," she says. "Even in Arcadia, I exist. A sobering thought." She introduces herself as Lady Mary.',
+                rightText: '"A gentler reading," she smiles. "I prefer yours, though scholars disagree." A friendship begins.',
+                leftItem: 'Meditation on Mortality',
+                rightItem: 'Letter from Lady Mary'
+            },
+            {
+                id: 'studio_visit',
+                week: 7,
+                character: 'Pompeo Batoni',
+                illustration: 'artist',
+                dialogue: '"The most fashionable portrait painter in Rome offers to paint your likeness. The English queue for months. His fees reflect his reputation."',
+                leftChoice: 'My face can wait',
+                rightChoice: 'Commission the portrait',
+                leftEffects: { purse: 10 },
+                rightEffects: { purse: -35, reputation: 25 },
+                leftText: 'You spend the scudi on books instead. Your appearance will fade; learning endures.',
+                rightText: 'Batoni positions you before a classical column, your hand resting on an antique bust. The image will outlast you.',
+                rightItem: 'Portrait by Batoni'
+            },
+            {
+                id: 'catacombs',
+                week: 7,
+                character: 'A Franciscan Friar',
+                illustration: 'ruins',
+                dialogue: '"The catacombs beneath San Sebastiano hold the bones of martyrs and mysteries older than Rome herself. I can guide you—but the passages are narrow and the air unwholesome."',
+                leftChoice: 'The living interest me more',
+                rightChoice: 'Lead on, Brother',
+                leftEffects: { reputation: 5 },
+                rightEffects: { health: -10, knowledge: 20 },
+                leftText: 'You remain in the sunlight, conversing with pilgrims. Safer, if less remarkable.',
+                rightText: 'The skulls watch as you pass. You emerge shaken but enlightened about early Christianity.',
+                rightItem: 'Fragment of ancient inscription'
+            },
+            {
+                id: 'gambling_salon',
+                week: 8,
+                character: 'The Ridotto',
+                illustration: 'salon',
+                dialogue: '"The gaming rooms are where fortunes change hands and reputations are made or destroyed. A Venetian merchant proposes a friendly wager at faro."',
+                leftChoice: 'Decline and observe',
+                rightChoice: 'Try your fortune',
+                leftEffects: { knowledge: 5 },
+                rightEffects: { purse: [-20, 30], reputation: 10 }, // Random outcome
+                leftText: 'You watch others win and lose. The merchant loses heavily; you are grateful for your caution.',
+                rightText: 'OUTCOME_GAMBLING',
+            },
+            {
+                id: 'cicero_manuscript',
+                week: 9,
+                character: 'A Bookseller',
+                illustration: 'antiquarian',
+                dialogue: '"I have acquired—through channels I cannot disclose—a manuscript claimed to be Cicero\'s own hand. Almost certainly genuine. The price reflects its rarity."',
+                leftChoice: 'Almost certainly a forgery',
+                rightChoice: 'I must have it',
+                leftEffects: { knowledge: 5 },
+                rightEffects: { purse: -40, knowledge: [30, -10] }, // Could be real or fake
+                leftText: 'The bookseller shrugs. "The English are less discerning." You wonder if you were too cautious.',
+                rightText: 'OUTCOME_MANUSCRIPT',
+            },
+            {
+                id: 'tivoli_excursion',
+                week: 9,
+                character: 'A Fellow Traveller',
+                illustration: 'ruins',
+                dialogue: '"Hadrian\'s Villa at Tivoli is essential—but the journey requires a full day and the roads harbour bandits. Will you join our party for safety, or venture alone at dawn?"',
+                leftChoice: 'Join the group',
+                rightChoice: 'Go alone at dawn',
+                leftEffects: { purse: -10, knowledge: 15, reputation: 5 },
+                rightEffects: { health: -5, knowledge: 25 },
+                leftText: 'The company is agreeable but slow. You see the villa through others\' eyes as much as your own.',
+                rightText: 'The solitude is magnificent. You have Hadrian\'s dreams to yourself until noon.',
+                rightItem: 'Sketch of Hadrian\'s Maritime Theatre'
+            },
+            {
+                id: 'sistine_chapel',
+                week: 10,
+                character: 'The Sistine Chapel',
+                illustration: 'stpeters',
+                dialogue: '"Michelangelo\'s ceiling overwhelms. A young artist beside you sketches furiously. \'Will you tell the guards?\' he whispers. \'Copying is forbidden.\'"',
+                leftChoice: 'Keep his secret',
+                rightChoice: 'Maintain your distance',
+                leftEffects: { reputation: -5, knowledge: 10 },
+                rightEffects: { reputation: 5 },
+                leftText: 'You shield him from view. He shares his sketches later—and insights into Michelangelo\'s technique.',
+                rightText: 'You move away. The guards notice nothing. Prudence sometimes tastes like cowardice.',
+            },
+            {
+                id: 'colosseum_moonlight',
+                week: 11,
+                character: 'A Midnight Visit',
+                illustration: 'ruins',
+                dialogue: '"The Colosseum by moonlight is Rome\'s most romantic experience. But the ruins harbour unsavoury characters after dark. A guide offers torchlit passage for a fee."',
+                leftChoice: 'Daylight suffices',
+                rightChoice: 'Risk the moonlight',
+                leftEffects: { knowledge: 5 },
+                rightEffects: { purse: -10, knowledge: 15, health: [-5, 0] },
+                leftText: 'You see the Colosseum as thousands have. Adequate, if unexceptional.',
+                rightText: 'The silver light transforms the arena into something sacred. You understand why poets weep here.',
+                rightItem: 'Memory of the Moonlit Colosseum'
+            },
+            {
+                id: 'departure_choice',
+                week: 12,
+                character: 'The Road North',
+                illustration: 'default',
+                dialogue: '"Your time in Rome draws to a close. The roads to Florence beckon—but a collector offers to purchase your entire cabinet for a handsome sum. Will you travel lighter?"',
+                leftChoice: 'Keep your treasures',
+                rightChoice: 'Sell and profit',
+                leftEffects: { knowledge: 10 },
+                rightEffects: { purse: 40, knowledge: -15 },
+                leftText: 'You depart Rome laden with memories and objects. The weight feels meaningful.',
+                rightText: 'Your purse is fat, your bags light. You wonder if you sold too cheaply.',
+            },
+        ];
+
+        // ============================================
+        // GAME LOGIC
+        // ============================================
+        var currentCard = null;
+        var isDragging = false;
+        var startX = 0;
+        var currentX = 0;
+
+        function showCharacterSelect() {
+            try {
+                document.getElementById('title-screen').classList.remove('show');
+                document.getElementById('character-screen').classList.add('show');
+                // Init audio on this user interaction
+                if (AudioSystem.init()) {
+                    AudioSystem.startMusic();
+                }
+            } catch (e) {
+                console.log('showCharacterSelect error:', e);
+            }
+        }
+
+        function selectCharacter(type) {
+            try {
+                GameState.character = type;
+                var preset = Characters[type];
+                GameState.stats = { 
+                    purse: preset.stats.purse,
+                    reputation: preset.stats.reputation,
+                    health: preset.stats.health,
+                    knowledge: preset.stats.knowledge
+                };
+                GameState.week = 1;
+                GameState.cabinet = [];
+                GameState.usedCards = [];
+                
+                document.getElementById('character-screen').classList.remove('show');
+                document.getElementById('game-screen').style.display = 'flex';
+                
+                updateStatsDisplay();
+                loadNextCard();
+            } catch (e) {
+                console.log('selectCharacter error:', e);
+                alert('Error starting game: ' + e.message);
+            }
+        }
+
+        function updateStatsDisplay() {
+            try {
+                var stats = ['purse', 'reputation', 'health', 'knowledge'];
+                for (var i = 0; i < stats.length; i++) {
+                    var stat = stats[i];
+                    var value = GameState.stats[stat];
+                    var bar = document.getElementById(stat + '-bar');
+                    var valueEl = document.getElementById(stat + '-value');
+                    var box = document.getElementById('stat-' + stat);
+                    
+                    if (bar) bar.style.width = value + '%';
+                    if (valueEl) valueEl.textContent = value;
+                    
+                    if (box) {
+                        if (value <= 15 || value >= 85) {
+                            box.classList.add('warning');
+                        } else {
+                            box.classList.remove('warning');
+                        }
+                    }
+                }
+                
+                var weekEl = document.getElementById('week-count');
+                if (weekEl) weekEl.textContent = GameState.week;
+            } catch (e) {
+                console.log('updateStatsDisplay error:', e);
+            }
+        }
+
+        function loadNextCard() {
+            try {
+                // Check for game over
+                var stats = GameState.stats;
+                if (stats.purse <= 0) return gameOver('bankruptcy', 'Your purse is empty. Without funds, you cannot continue. The Grand Tour ends in ignominy.');
+                if (stats.purse >= 100) return gameOver('excess', 'Your wealth attracts the wrong attention. Bandits relieve you of everything on the road to Florence.');
+                if (stats.reputation <= 0) return gameOver('disgrace', 'Your reputation is ruined. Doors close; letters go unanswered. You slink home in shame.');
+                if (stats.reputation >= 100) return gameOver('celebrity', 'Your fame becomes your prison. You cannot move without crowds. The quiet study you sought is impossible.');
+                if (stats.health <= 0) return gameOver('illness', 'The Roman fever claims another victim. You are buried in the Protestant Cemetery, beside Keats.');
+                if (stats.health >= 100) return gameOver('reckless', 'Overconfidence in your vigour leads to a fatal accident in the catacombs.');
+                if (stats.knowledge <= 0) return gameOver('ignorance', 'You have learned nothing. Your patron withdraws support, deeming the investment wasted.');
+                if (stats.knowledge >= 100) return gameOver('obsession', 'Your pursuit of knowledge consumes all else. You forget to eat, to sleep. Madness follows.');
+                
+                // Check for chapter completion
+                if (GameState.week > GameState.maxWeeks) {
+                    return chapterComplete();
+                }
+                
+                // Get available cards for current week
+                var availableCards = [];
+                for (var i = 0; i < RomeCards.length; i++) {
+                    var card = RomeCards[i];
+                    if (GameState.usedCards.indexOf(card.id) === -1 && card.week <= GameState.week) {
+                        availableCards.push(card);
+                    }
+                }
+                
+                if (availableCards.length === 0) {
+                    GameState.week++;
+                    GameState.usedCards = [];
+                    return loadNextCard();
+                }
+                
+                // Pick a random available card
+                currentCard = availableCards[Math.floor(Math.random() * availableCards.length)];
+                GameState.usedCards.push(currentCard.id);
+                
+                displayCard(currentCard);
+            } catch (e) {
+                console.log('loadNextCard error:', e);
+            }
+        }
+
+        function displayCard(card) {
+            try {
+                var cardEl = document.getElementById('game-card');
+                cardEl.classList.remove('swiping-left', 'swiping-right');
+                cardEl.classList.add('entering');
+                
+                var weekEl = document.querySelector('.card-week');
+                var charEl = document.querySelector('.card-character');
+                var illustEl = document.getElementById('card-illustration');
+                var dialogueEl = document.getElementById('card-dialogue');
+                var leftChoiceEl = document.getElementById('left-choice');
+                var rightChoiceEl = document.getElementById('right-choice');
+                var leftIndEl = document.getElementById('left-indicator');
+                var rightIndEl = document.getElementById('right-indicator');
+                
+                if (weekEl) weekEl.textContent = 'Week ' + card.week;
+                if (charEl) charEl.textContent = card.character;
+                if (illustEl) illustEl.innerHTML = Illustrations[card.illustration] || Illustrations.default;
+                if (dialogueEl) dialogueEl.textContent = card.dialogue;
+                if (leftChoiceEl) leftChoiceEl.textContent = card.leftChoice;
+                if (rightChoiceEl) rightChoiceEl.textContent = card.rightChoice;
+                if (leftIndEl) leftIndEl.textContent = card.leftChoice;
+                if (rightIndEl) rightIndEl.textContent = card.rightChoice;
+                
+                setTimeout(function() { 
+                    cardEl.classList.remove('entering'); 
+                }, 400);
+            } catch (e) {
+                console.log('displayCard error:', e);
+            }
+        }
+
+        function applyChoice(direction) {
+            try {
+                if (!currentCard) return;
+                
+                var effects = direction === 'left' ? currentCard.leftEffects : currentCard.rightEffects;
+                var item = direction === 'left' ? currentCard.leftItem : currentCard.rightItem;
+                
+                // Apply stat changes
+                var statKeys = Object.keys(effects);
+                for (var i = 0; i < statKeys.length; i++) {
+                    var stat = statKeys[i];
+                    var change = effects[stat];
+                    var actualChange = change;
+                    
+                    // Handle random outcomes (arrays)
+                    if (Array.isArray(change)) {
+                        actualChange = change[Math.floor(Math.random() * change.length)];
+                    }
+                    
+                    var oldValue = GameState.stats[stat];
+                    GameState.stats[stat] = Math.max(0, Math.min(100, oldValue + actualChange));
+                    
+                    showStatChange(stat, actualChange);
+                }
+                
+                // Add item to cabinet
+                if (item) {
+                    GameState.cabinet.push(item);
+                }
+                
+                // Play sound
+                if (direction === 'left') {
+                    AudioSystem.playSwipeLeft();
+                } else {
+                    AudioSystem.playSwipeRight();
+                }
+                
+                // Animate card exit
+                var cardEl = document.getElementById('game-card');
+                cardEl.classList.add(direction === 'left' ? 'swiping-left' : 'swiping-right');
+                
+                // Update display and load next card
+                setTimeout(function() {
+                    updateStatsDisplay();
+                    GameState.week = Math.min(GameState.week + 1, GameState.maxWeeks + 1);
+                    loadNextCard();
+                }, 400);
+            } catch (e) {
+                console.log('applyChoice error:', e);
+            }
+        }
+
+        function showStatChange(stat, change) {
+            try {
+                var statBox = document.getElementById('stat-' + stat);
+                if (!statBox) return;
+                
+                var rect = statBox.getBoundingClientRect();
+                
+                var indicator = document.createElement('div');
+                indicator.className = 'stat-change ' + (change >= 0 ? 'positive' : 'negative');
+                indicator.textContent = change >= 0 ? '+' + change : change;
+                indicator.style.left = (rect.left + rect.width / 2) + 'px';
+                indicator.style.top = (rect.bottom + 5) + 'px';
+                
+                document.body.appendChild(indicator);
+                setTimeout(function() { 
+                    if (indicator.parentNode) {
+                        indicator.parentNode.removeChild(indicator);
+                    }
+                }, 1500);
+            } catch (e) {
+                console.log('showStatChange error:', e);
+            }
+        }
+
+        function gameOver(reason, text) {
+            try {
+                AudioSystem.playGameOver();
+                
+                var icons = {
+                    bankruptcy: '💸', excess: '💰', disgrace: '😔', celebrity: '👑',
+                    illness: '💀', reckless: '⚰️', ignorance: '📕', obsession: '🌀'
+                };
+                
+                var iconEl = document.getElementById('gameover-icon');
+                var titleEl = document.getElementById('gameover-title');
+                var reasonEl = document.getElementById('gameover-reason');
+                var cabinetEl = document.getElementById('cabinet-items');
+                var statsEl = document.getElementById('gameover-stats');
+                
+                if (iconEl) iconEl.textContent = icons[reason] || '📜';
+                if (titleEl) titleEl.textContent = 'Your Tour Concludes';
+                if (reasonEl) reasonEl.textContent = text;
+                if (cabinetEl) cabinetEl.textContent = GameState.cabinet.length > 0 ? GameState.cabinet.join(', ') : 'Nothing of note';
+                if (statsEl) statsEl.textContent = 'Survived ' + (GameState.week - 1) + ' weeks in Rome';
+                
+                document.getElementById('game-screen').style.display = 'none';
+                document.getElementById('gameover-screen').classList.add('show');
+            } catch (e) {
+                console.log('gameOver error:', e);
+            }
+        }
+
+        function chapterComplete() {
+            try {
+                AudioSystem.playVictory();
+                
+                var acqEl = document.getElementById('rome-acquisitions');
+                var statsEl = document.getElementById('chapter-stats');
+                
+                if (acqEl) acqEl.textContent = GameState.cabinet.length > 0 ? GameState.cabinet.join(', ') : 'Memories alone';
+                if (statsEl) statsEl.textContent = 'Purse: ' + GameState.stats.purse + ' · Reputation: ' + GameState.stats.reputation + ' · Health: ' + GameState.stats.health + ' · Knowledge: ' + GameState.stats.knowledge;
+                
+                document.getElementById('game-screen').style.display = 'none';
+                document.getElementById('chapter-complete').classList.add('show');
+            } catch (e) {
+                console.log('chapterComplete error:', e);
+            }
+        }
+
+        function restartGame() {
+            try {
+                var screens = document.querySelectorAll('.screen');
+                for (var i = 0; i < screens.length; i++) {
+                    screens[i].classList.remove('show');
+                }
+                document.getElementById('game-screen').style.display = 'none';
+                document.getElementById('title-screen').classList.add('show');
+                
+                // Reset state
+                GameState.character = null;
+                GameState.week = 1;
+                GameState.stats = { purse: 50, reputation: 50, health: 50, knowledge: 50 };
+                GameState.cabinet = [];
+                GameState.usedCards = [];
+                currentCard = null;
+            } catch (e) {
+                console.log('restartGame error:', e);
+            }
+        }
+
+        // ============================================
+        // TOUCH / MOUSE CONTROLS
+        // ============================================
+        var isDragging = false;
+        var startX = 0;
+        var currentX = 0;
+
+        function initControls() {
+            try {
+                var cardArea = document.getElementById('card-area');
+                var card = document.getElementById('game-card');
+                
+                if (!card || !cardArea) {
+                    console.log('Card elements not found');
+                    return;
+                }
+                
+                // Touch events
+                card.addEventListener('touchstart', handleDragStart, { passive: true });
+                card.addEventListener('touchmove', handleDragMove, { passive: true });
+                card.addEventListener('touchend', handleDragEnd);
+                
+                // Mouse events
+                card.addEventListener('mousedown', handleDragStart);
+                document.addEventListener('mousemove', handleDragMove);
+                document.addEventListener('mouseup', handleDragEnd);
+                
+                // Click areas
+                cardArea.addEventListener('click', handleClick);
+                
+                console.log('Controls initialized');
+            } catch (e) {
+                console.log('initControls error:', e);
+            }
+        }
+
+        function handleDragStart(e) {
+            if (!currentCard) return;
+            isDragging = true;
+            startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            currentX = startX;
+        }
+
+        function handleDragMove(e) {
+            if (!isDragging) return;
+            currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            var diff = currentX - startX;
+            
+            var card = document.getElementById('game-card');
+            var rotation = diff * 0.05;
+            card.style.transform = 'translateX(' + diff + 'px) rotate(' + rotation + 'deg)';
+            
+            var leftIndicator = document.getElementById('left-indicator');
+            var rightIndicator = document.getElementById('right-indicator');
+            
+            if (diff < -30) {
+                leftIndicator.classList.add('show');
+                rightIndicator.classList.remove('show');
+            } else if (diff > 30) {
+                rightIndicator.classList.add('show');
+                leftIndicator.classList.remove('show');
+            } else {
+                leftIndicator.classList.remove('show');
+                rightIndicator.classList.remove('show');
+            }
+        }
+
+        function handleDragEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            var diff = currentX - startX;
+            var card = document.getElementById('game-card');
+            
+            document.getElementById('left-indicator').classList.remove('show');
+            document.getElementById('right-indicator').classList.remove('show');
+            
+            if (Math.abs(diff) > 80) {
+                applyChoice(diff < 0 ? 'left' : 'right');
+            } else {
+                card.style.transform = '';
+            }
+        }
+
+        function handleClick(e) {
+            if (!currentCard) return;
+            
+            var cardArea = document.getElementById('card-area');
+            var rect = cardArea.getBoundingClientRect();
+            var clickX = e.clientX - rect.left;
+            var width = rect.width;
+            
+            if (clickX < width * 0.35) {
+                applyChoice('left');
+            } else if (clickX > width * 0.65) {
+                applyChoice('right');
+            }
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initControls);
+        } else {
+            initControls();
+        }
+    </script>
+</body>
+</html>
