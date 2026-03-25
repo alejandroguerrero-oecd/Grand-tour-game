@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.QRContact" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/oecd_blue</item>
+        <item name="colorPrimaryDark">@color/oecd_blue_dark</item>
+        <item name="colorAccent">@color/oecd_blue</item>
+        <item name="android:statusBarColor">@color/oecd_blue</item>
+    </style>
+</resources>

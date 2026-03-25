@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="oecd_blue">#003399</color>
+    <color name="oecd_blue_dark">#002266</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>
