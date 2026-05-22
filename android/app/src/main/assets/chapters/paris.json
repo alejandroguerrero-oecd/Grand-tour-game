@@ -1,0 +1,23 @@
+{
+  "id": "paris",
+  "title": "Paris",
+  "ordinal": 4,
+  "maxWeeks": 12,
+  "completionText": "You leave Paris carrying philosophes' letters and a dangerous taste for politics. The Channel awaits.",
+  "previousChapterId": "venice",
+  "cards": [
+    {
+      "id": "paris_arrival",
+      "week": 1,
+      "character": "Arrival at the Faubourg",
+      "illustration": "salon",
+      "dialogue": "\"The Faubourg Saint-Germain wakes early. Carriages clatter, hawkers cry, and a small boy offers to carry your bags for a sou. The city smells of bread and Enlightenment.\"",
+      "leftChoice": "Hire your own porter",
+      "rightChoice": "Trust the boy",
+      "leftEffects":  { "purse": -4, "reputation":  4 },
+      "rightEffects": { "purse":  1, "reputation": -2, "knowledge": 3 },
+      "leftText":  "A solid Norman shoulders your trunk. He recommends a café where Diderot dines on Tuesdays.",
+      "rightText": "The boy proves swift and honest. He also tells you which streets to avoid after dark."
+    }
+  ]
+}

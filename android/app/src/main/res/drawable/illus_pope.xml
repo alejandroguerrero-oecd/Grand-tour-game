@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="140dp"
+    android:viewportWidth="320"
+    android:viewportHeight="140">
+    <!-- Head -->
+    <path
+        android:pathData="M145,40 a15,15 0 1 0 30,0 a15,15 0 1 0 -30,0 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <!-- Tiara -->
+    <path
+        android:pathData="M145,35 L160,15 L175,35"
+        android:strokeColor="#C9A227" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <path android:pathData="M152,28 L168,28" android:strokeColor="#C9A227" android:strokeWidth="1" />
+    <path android:pathData="M150,33 L170,33" android:strokeColor="#C9A227" android:strokeWidth="1" />
+    <!-- Robes -->
+    <path
+        android:pathData="M145,55 Q160,50 175,55 L190,125 L130,125 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <!-- Keys of St Peter -->
+    <path
+        android:pathData="M115,70 L100,90 M100,90 L95,85 M100,90 L105,85"
+        android:strokeColor="#C9A227" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <path
+        android:pathData="M205,70 L220,90 M220,90 L215,85 M220,90 L225,85"
+        android:strokeColor="#C9A227" android:strokeWidth="1.5" android:fillColor="#00000000" />
+</vector>

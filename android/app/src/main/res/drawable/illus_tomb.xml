@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="140dp"
+    android:viewportWidth="320"
+    android:viewportHeight="140">
+    <!-- Sarcophagus -->
+    <path
+        android:pathData="M100,70 h120 v45 h-120 Z"
+        android:strokeColor="#704214" android:strokeWidth="2" android:fillColor="#00000000" />
+    <path
+        android:pathData="M95,65 h130 v8 h-130 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <path
+        android:pathData="M95,112 h130 v8 h-130 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <!-- Cypresses -->
+    <path
+        android:pathData="M60,120 L70,40 L80,120 Z"
+        android:strokeColor="#2D5A27" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M250,120 L260,50 L270,120 Z"
+        android:strokeColor="#2D5A27" android:strokeWidth="1" android:fillColor="#00000000" />
+</vector>

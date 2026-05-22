@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="140dp"
+    android:viewportWidth="320"
+    android:viewportHeight="140">
+    <!-- Head -->
+    <path
+        android:pathData="M142,45 a18,18 0 1 0 36,0 a18,18 0 1 0 -36,0 Z"
+        android:strokeColor="#8B1A1A"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000" />
+    <!-- Biretta -->
+    <path
+        android:pathData="M160,27 L155,15 L160,18 L165,15 Z"
+        android:fillColor="#8B1A1A" />
+    <!-- Robes -->
+    <path
+        android:pathData="M142,63 Q160,58 178,63 L185,120 L135,120 Z"
+        android:strokeColor="#8B1A1A"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000" />
+    <!-- Cross -->
+    <path android:pathData="M160,70 L160,100" android:strokeColor="#C9A227" android:strokeWidth="2" />
+    <path android:pathData="M150,80 L170,80" android:strokeColor="#C9A227" android:strokeWidth="2" />
+</vector>

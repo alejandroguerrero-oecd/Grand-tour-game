@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="140dp"
+    android:viewportWidth="320"
+    android:viewportHeight="140">
+    <!-- Easel legs -->
+    <path android:pathData="M140,30 L120,120" android:strokeColor="#704214" android:strokeWidth="1.5" />
+    <path android:pathData="M180,30 L200,120" android:strokeColor="#704214" android:strokeWidth="1.5" />
+    <path android:pathData="M160,25 L160,50" android:strokeColor="#704214" android:strokeWidth="1" />
+    <!-- Canvas -->
+    <path
+        android:pathData="M125,35 h70 v55 h-70 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <path
+        android:pathData="M135,45 h50 v35 h-50 Z"
+        android:strokeColor="#8B5A2B" android:strokeWidth="0.5" android:fillColor="#00000000" />
+    <!-- Palette -->
+    <path
+        android:pathData="M225,90 a25,15 0 1 0 50,0 a25,15 0 1 0 -50,0 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M236,85 a4,4 0 1 0 8,0 a4,4 0 1 0 -8,0 Z"
+        android:strokeColor="#8B1A1A" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M252,88 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0 Z"
+        android:strokeColor="#1A3A5C" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M247,95 a3,3 0 1 0 6,0 a3,3 0 1 0 -6,0 Z"
+        android:strokeColor="#C9A227" android:strokeWidth="1" android:fillColor="#00000000" />
+</vector>

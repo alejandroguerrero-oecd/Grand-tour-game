@@ -1,0 +1,23 @@
+{
+  "id": "venice",
+  "title": "Venice",
+  "ordinal": 3,
+  "maxWeeks": 12,
+  "completionText": "Venice slips behind you in mist. The Alps loom. Paris is half a continent away, but you have come this far.",
+  "previousChapterId": "florence",
+  "cards": [
+    {
+      "id": "venice_arrival",
+      "week": 1,
+      "character": "Arrival by Gondola",
+      "illustration": "default",
+      "dialogue": "\"The gondola threads the lagoon at dawn. Saint Mark's domes rise from the water like an Eastern dream. A gondolier asks where you wish to lodge.\"",
+      "leftChoice": "Near the Rialto",
+      "rightChoice": "On the Grand Canal",
+      "leftEffects":  { "purse":  3, "knowledge": 5 },
+      "rightEffects": { "purse": -18, "reputation": 12 },
+      "leftText":  "Your rooms smell of fish and ink. The Rialto bustles below; you are inside the city's heart.",
+      "rightText": "A small palazzo opens its shutters for you. Casanova himself is rumoured to dine downstairs."
+    }
+  ]
+}

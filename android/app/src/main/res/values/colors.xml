@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="parchment">#F4E4C1</color>
+    <color name="parchment_dark">#E8D4A8</color>
+    <color name="sepia">#704214</color>
+    <color name="sepia_light">#8B5A2B</color>
+    <color name="ink">#2C1810</color>
+    <color name="ink_light">#4A3728</color>
+    <color name="gold">#C9A227</color>
+    <color name="gold_dark">#96750A</color>
+    <color name="crimson">#8B1A1A</color>
+    <color name="prussian">#1A3A5C</color>
+    <color name="forest_green">#2D5A27</color>
+</resources>

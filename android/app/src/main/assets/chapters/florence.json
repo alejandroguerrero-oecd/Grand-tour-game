@@ -1,0 +1,23 @@
+{
+  "id": "florence",
+  "title": "Florence",
+  "ordinal": 2,
+  "maxWeeks": 12,
+  "completionText": "You depart Florence with eyes full of Botticelli and pockets full of forged Medici medals. Venice awaits.",
+  "previousChapterId": "rome",
+  "cards": [
+    {
+      "id": "florence_arrival",
+      "week": 1,
+      "character": "Arrival in Florence",
+      "illustration": "default",
+      "dialogue": "\"You cross the Apennines and descend into the Arno valley. Florence sits like a jewel in the dust, and you have letters of introduction in your pocket.\"",
+      "leftChoice": "Rest a day at the inn",
+      "rightChoice": "Call at once on your contact",
+      "leftEffects":  { "health":  5, "reputation": -3 },
+      "rightEffects": { "purse": -5, "reputation": 8 },
+      "leftText":  "You wash off the road dust and write letters. The Arno glints below your window.",
+      "rightText": "Signor Bardi receives you graciously. By evening you have invitations to three dinners."
+    }
+  ]
+}

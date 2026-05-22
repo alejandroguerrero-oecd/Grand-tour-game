@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="140dp"
+    android:viewportWidth="320"
+    android:viewportHeight="140">
+    <!-- Bed -->
+    <path
+        android:pathData="M80,80 h160 v35 h-160 Z"
+        android:strokeColor="#704214" android:strokeWidth="1.5" android:fillColor="#00000000" />
+    <path
+        android:pathData="M75,75 h10 v45 h-10 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M235,75 h10 v45 h-10 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+    <!-- Patient -->
+    <path
+        android:pathData="M110,75 a20,12 0 1 0 40,0 a20,12 0 1 0 -40,0 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+    <!-- Fever waves -->
+    <path
+        android:pathData="M100,50 Q110,45 120,50 Q130,55 140,50"
+        android:strokeColor="#8B1A1A" android:strokeWidth="1" android:fillColor="#00000000" android:strokeAlpha="0.6" />
+    <path
+        android:pathData="M110,40 Q120,35 130,40 Q140,45 150,40"
+        android:strokeColor="#8B1A1A" android:strokeWidth="1" android:fillColor="#00000000" android:strokeAlpha="0.4" />
+    <!-- Medicine bottle -->
+    <path
+        android:pathData="M250,85 h15 v25 h-15 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+    <path
+        android:pathData="M253,80 h9 v6 h-9 Z"
+        android:strokeColor="#704214" android:strokeWidth="1" android:fillColor="#00000000" />
+</vector>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">The Grand Tour</string>
+
+    <string name="title_main">The Grand Tour</string>
+    <string name="title_subtitle">A Game of Enlightenment</string>
+    <string name="title_description">Embark upon the Grand Tour of Europe. Navigate society, manage your purse, and return with cabinets full of curiosities — or do not return at all.</string>
+    <string name="title_begin">Begin Your Journey</string>
+    <string name="title_continue">Continue</string>
+
+    <string name="character_select_title">Choose Your Station</string>
+    <string name="character_aristocrat_name">Young Aristocrat</string>
+    <string name="character_aristocrat_desc">Pockets deep, mind shallow. Society opens its doors.</string>
+    <string name="character_scholar_name">Impecunious Scholar</string>
+    <string name="character_scholar_desc">Learning abundant, purse light. The journey will test both.</string>
+    <string name="character_widow_name">Learned Widow</string>
+    <string name="character_widow_desc">Balanced in all things. Discretion is your shield.</string>
+
+    <string name="chapter_map_title">Itinerary</string>
+    <string name="chapter_locked">— Locked —</string>
+
+    <string name="stat_purse">Purse</string>
+    <string name="stat_reputation">Reputation</string>
+    <string name="stat_health">Health</string>
+    <string name="stat_knowledge">Knowledge</string>
+
+    <string name="control_hint">Swipe or tap left / right to decide</string>
+    <string name="week_display">Week %1$d of %2$d · %3$s</string>
+
+    <string name="gameover_title">Your Tour Concludes</string>
+    <string name="cabinet_title">Your Cabinet of Curiosities</string>
+    <string name="cabinet_empty">Nothing of note</string>
+    <string name="gameover_stats_fmt">Survived %1$d weeks in %2$s</string>
+    <string name="restart">Begin Anew</string>
+
+    <string name="chapter_complete_title_fmt">%s Complete</string>
+    <string name="chapter_complete_acquisitions">Acquisitions</string>
+    <string name="chapter_complete_stats_fmt">Purse: %1$d · Reputation: %2$d · Health: %3$d · Knowledge: %4$d</string>
+    <string name="chapter_complete_next">Continue North</string>
+    <string name="chapter_complete_done">Play Again</string>
+
+    <string name="sound_on">Sound on</string>
+    <string name="sound_off">Sound off</string>
+</resources>
