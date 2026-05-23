@@ -32,6 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
@@ -51,6 +53,20 @@ import com.grandtour.ui.theme.Sepia
 import com.grandtour.ui.theme.SepiaLight
 import kotlinx.coroutines.launch
 import kotlin.math.abs
+
+/**
+ * Sepia color matrix applied to illustrations so engravings (color or
+ * grayscale) blend with the parchment-and-ink theme. Classic conversion
+ * weights — same matrix you'd see in any vintage photo filter.
+ */
+private val SepiaFilter: ColorFilter = ColorFilter.colorMatrix(
+    ColorMatrix(floatArrayOf(
+        0.393f, 0.769f, 0.189f, 0f, 0f,
+        0.349f, 0.686f, 0.168f, 0f, 0f,
+        0.272f, 0.534f, 0.131f, 0f, 0f,
+        0f,     0f,     0f,     1f, 0f,
+    ))
+)
 
 /**
  * Swipe-driven card. Matches the web semantics at index.html:1763–1824:
@@ -200,7 +216,7 @@ private fun CardContent(card: CardDef) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp)
+                .height(160.dp)
                 .background(SepiaLight.copy(alpha = 0.06f)),
             contentAlignment = Alignment.Center,
         ) {
@@ -208,6 +224,8 @@ private fun CardContent(card: CardDef) {
                 painter = painterResource(IllustrationRegistry.resOf(card.illustration)),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
+                contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                colorFilter = SepiaFilter,
             )
         }
         // Body — dialogue

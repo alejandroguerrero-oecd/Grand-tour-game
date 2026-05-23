@@ -33,7 +33,9 @@ adb shell am start -n com.grandtour.debug/com.grandtour.MainActivity
   - `audio/` — `AudioEngine` (SoundPool + MediaPlayer; silent until WAVs are added)
   - `illustration/` — `IllustrationRegistry` mapping JSON keys to VectorDrawables
 - `app/src/main/assets/chapters/` — chapter JSON (rome.json + future cities)
-- `app/src/main/res/drawable/` — 10 hand-converted VectorDrawables
+- `app/src/main/res/drawable/` — placeholder VectorDrawables (replaced
+  by Wikimedia engravings once you run `tools/fetch_illustrations.py`;
+  see [`docs/illustrations.md`](docs/illustrations.md))
 - `app/src/test/kotlin/` — JVM unit tests for `GameEngine`, `EffectValueSerializer`
 
 ## Tests
