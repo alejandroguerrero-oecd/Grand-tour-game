@@ -1,7 +1,10 @@
 # Audio assets
 
-The runtime reads these files via `Resources.getIdentifier()`. They are
-optional — the app builds and runs silently without them.
+The runtime reads these files via `Resources.getIdentifier()` from
+`app/src/main/res/raw/`. They are optional — the app builds and runs
+silently without them. (The `raw/` directory does not exist in the
+checked-in tree because git does not track empty directories; create it
+when you drop the first file in.)
 
 Files expected:
 - `sfx_swipe_left.wav`  — descending tritone (392, 330, 294 Hz)

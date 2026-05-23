@@ -60,8 +60,9 @@ JSON `int | int[]` decoding pattern.
   Cormorant Garamond, and IM Fell English `.ttf` files into `res/font/`
   and update `Type.kt` to reference them. All three are SIL OFL 1.1
   licensed (ship `OFL.txt` in `assets/licenses/`).
-- **Audio** — see `app/src/main/res/raw/README.md`. Until WAVs are
-  generated and dropped in, `AudioEngine` silently no-ops.
+- **Audio** — see [`docs/audio.md`](docs/audio.md). Until WAVs are
+  generated and dropped in `app/src/main/res/raw/`, `AudioEngine` silently
+  no-ops.
 - **Chapter complete payload** — the final stats and cabinet aren't
   currently passed through the navigation. Fix: extend
   `ChapterCompleteRoute` and thread them from `GameSessionViewModel`.
