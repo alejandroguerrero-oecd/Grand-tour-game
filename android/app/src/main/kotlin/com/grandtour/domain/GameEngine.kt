@@ -13,10 +13,14 @@ import kotlin.random.Random
 /**
  * Pure game logic — no Android deps, JVM-testable with a seeded [Random].
  * Mirrors the web build at index.html:1510–1635.
+ *
+ * The no-arg constructor is the Hilt-injected one; the rng-taking
+ * constructor exists for tests that need a seeded RNG.
  */
-class GameEngine @Inject constructor(
-    private val rng: Random = Random.Default,
-) {
+class GameEngine(private val rng: Random) {
+
+    @Inject constructor() : this(Random.Default)
+
 
     data class StatChange(val stat: Stat, val delta: Int)
     data class ChoiceOutcome(
