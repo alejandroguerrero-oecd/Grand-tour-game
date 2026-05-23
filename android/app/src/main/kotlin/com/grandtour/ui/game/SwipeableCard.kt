@@ -88,9 +88,11 @@ fun SwipeableCard(
     val offsetX = remember(card.id) { Animatable(0f) }
     val scope = rememberCoroutineScope()
 
-    // Card entry animation: fade in from slight scale-down.
-    LaunchedEffect(card.id) {
-        // Fresh card resets offset (Animatable is keyed on card.id anyway).
+    // Reset position whenever the displayed card or phase changes — guards
+    // against the case where the engine hands us back the same card.id after
+    // a swipe (the remember above doesn't reinit, so we'd otherwise still be
+    // animated off-screen).
+    LaunchedEffect(card.id, outcomeText) {
         offsetX.snapTo(0f)
     }
 

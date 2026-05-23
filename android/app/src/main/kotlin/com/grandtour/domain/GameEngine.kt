@@ -67,28 +67,27 @@ class GameEngine(private val rng: Random) {
     }
 
     /**
-     * Picks the next card to show. Mirrors index.html:1529–1545: candidate set
-     * is all cards whose `week <= currentWeek` and id is not in `usedCards`.
-     * If empty, the caller should bump the week and retry — but as a convenience
-     * we recurse here, returning `null` only if the entire chapter is exhausted.
+     * Picks the next card to show. Candidate set is all cards whose `week <=
+     * currentWeek` and id not in `usedCards`. If nothing's available at the
+     * current week, advances the week counter (cards may be gated by week)
+     * but does NOT recycle used cards — each card is one-shot per chapter.
+     * Returns `null` once the deck is exhausted; the caller treats that as
+     * chapter completion.
      */
     fun pickNextCard(
         chapter: ChapterDef,
         currentWeek: Int,
         usedCards: Set<String>,
     ): CardSelection? {
+        if (usedCards.size >= chapter.cards.size) return null
         var week = currentWeek
-        var used = usedCards
         while (week <= chapter.maxWeeks) {
-            val available = chapter.cards.filter { it.week <= week && it.id !in used }
+            val available = chapter.cards.filter { it.week <= week && it.id !in usedCards }
             if (available.isNotEmpty()) {
                 val pick = available.random(rng)
                 return CardSelection(pick, week)
             }
-            // No cards available at this week — advance and reset used set
-            // (matches the web's `GameState.week++; GameState.usedCards = [];`).
             week++
-            used = emptySet()
         }
         return null
     }

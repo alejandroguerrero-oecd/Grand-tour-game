@@ -1,64 +1,58 @@
 {
-  "_comment": "Map each illustration key to candidate Wikimedia Commons sources. The fetch script tries each candidate in order. If a title doesn't resolve, edit it and rerun. Categories you may want to browse manually: 'Vedute di Roma by Piranesi', 'Paintings by Giovanni Paolo Panini', 'Paintings by Canaletto', 'Engravings by Augustin de Saint-Aubin'.",
+  "_comment": "Map illustration keys to candidate Wikimedia Commons sources. The fetch script tries each `titles` entry in order, then falls back to the `search` query. If a key fails entirely, edit `titles` with a known-good Commons filename (browse commons.wikimedia.org → click image → URL ends with /wiki/File:Name.jpg). Browse these categories for inspiration: 'Vedute di Roma by Piranesi', 'Vedute di Firenze by Giuseppe Zocchi', 'Paintings by Canaletto', 'Engravings by Augustin de Saint-Aubin'.",
 
   "rome": {
     "illus_default": {
       "titles": [
-        "Piranesi, Veduta dell Pantheon d'Agrippa.jpg",
-        "Pantheon Rome Piranesi.jpg"
+        "Piranesi Pantheon Veduta.jpg",
+        "Veduta del Pantheon d'Agrippa.jpg"
       ],
-      "search": "Piranesi Pantheon Rome veduta",
-      "credit": "Giovanni Battista Piranesi — Veduta del Pantheon d'Agrippa (18th c.)"
+      "search": "Piranesi Pantheon veduta Rome",
+      "credit": "Piranesi — Veduta del Pantheon d'Agrippa"
     },
     "illus_stpeters": {
       "titles": [
-        "Piranesi-17005.jpg",
-        "Veduta della Basilica di S. Pietro in Vaticano (1748).jpg",
-        "Piranesi - Vedute di Roma - Veduta della Basilica di San Pietro in Vaticano.jpg"
+        "Piranesi - Veduta della Basilica di S. Pietro in Vaticano.jpg",
+        "Veduta della Basilica di S. Pietro in Vaticano (1748).jpg"
       ],
-      "search": "Piranesi Basilica San Pietro Vaticano veduta",
+      "search": "Piranesi Basilica San Pietro Vaticano",
       "credit": "Piranesi — Veduta della Basilica di S. Pietro in Vaticano"
     },
     "illus_cardinal": {
       "titles": [
-        "Cardinal Alessandro Albani.jpg",
-        "Carlo Marchionni - Cardinal Alessandro Albani.jpg",
-        "Pope Clement XIII Rezzonico portrait engraving.jpg"
+        "Carlo Maratta - Cardinal Antonio Barberini.jpg",
+        "Pope Clement XIII Rezzonico.jpg"
       ],
-      "search": "Cardinal Albani 18th century portrait engraving",
+      "search": "cardinal 18th century portrait engraving",
       "credit": "18th-century engraved portrait of a Cardinal"
     },
     "illus_ruins": {
       "titles": [
         "Piranesi - Veduta degli avanzi del Foro Romano.jpg",
-        "Piranesi-17012.jpg",
-        "Veduta del Foro Romano detto il Campo Vaccino.jpg"
+        "Piranesi Forum Romanum.jpg"
       ],
-      "search": "Piranesi Foro Romano veduta avanzi ruins",
+      "search": "Piranesi Foro Romano avanzi Campo Vaccino",
       "credit": "Piranesi — Veduta degli avanzi del Foro Romano"
     },
     "illus_salon": {
       "titles": [
-        "Saint-Aubin Le concert.jpg",
         "Augustin de Saint-Aubin - Le Concert.jpg",
-        "Moreau le Jeune - Soirée d'hiver.jpg"
+        "Saint-Aubin salon engraving.jpg"
       ],
-      "search": "Augustin de Saint-Aubin salon concert 18th century engraving",
-      "credit": "Augustin de Saint-Aubin or Moreau le Jeune — 18th-c. Parisian salon"
+      "search": "18th century French salon engraving Saint-Aubin",
+      "credit": "Augustin de Saint-Aubin — salon scene"
     },
     "illus_antiquarian": {
       "titles": [
-        "Pannini - Roma Antica.jpg",
-        "Giovanni Paolo Panini - Picture Gallery with Views of Modern Rome.jpg",
-        "Pannini Galleria di vedute di Roma antica.jpg"
+        "Giovanni Paolo Panini - Roma Antica.jpg",
+        "Panini Picture Gallery Modern Rome.jpg"
       ],
-      "search": "Panini Roma Antica gallery vedute",
-      "credit": "Giovanni Paolo Panini — Roma Antica (Gallery of Views)"
+      "search": "Panini Roma antica picture gallery",
+      "credit": "Giovanni Paolo Panini — Roma Antica"
     },
     "illus_tomb": {
       "titles": [
         "Piranesi - Sepolcro di Cecilia Metella.jpg",
-        "Piranesi tomb of Caecilia Metella.jpg",
         "Tomb of Caecilia Metella Piranesi.jpg"
       ],
       "search": "Piranesi tomb Caecilia Metella sepolcro",
@@ -66,66 +60,132 @@
     },
     "illus_artist": {
       "titles": [
-        "Pompeo Batoni self-portrait.jpg",
-        "Studio of Pompeo Batoni.jpg",
+        "Pompeo Batoni self portrait.jpg",
         "Joseph Wright of Derby - An Academy by Lamplight.jpg"
       ],
-      "search": "Pompeo Batoni studio 18th century painter engraving",
-      "credit": "18th-century painter's studio scene"
+      "search": "18th century painter studio engraving Wright Derby",
+      "credit": "18th-century painter's studio"
     },
     "illus_pope": {
       "titles": [
-        "Pope Clement XIII Rezzonico engraving.jpg",
-        "Clemens XIII Rezzonico.jpg",
-        "Anton Raphael Mengs - Pope Clement XIII.jpg"
+        "Anton Raphael Mengs - Pope Clement XIII.jpg",
+        "Pope Clement XIII Rezzonico engraving.jpg"
       ],
-      "search": "Pope Clement XIII Rezzonico engraving portrait",
-      "credit": "Engraved portrait of Pope Clement XIII Rezzonico (r. 1758–1769)"
+      "search": "Pope Clement XIII Rezzonico portrait",
+      "credit": "Pope Clement XIII Rezzonico"
     },
     "illus_fever": {
       "titles": [
-        "Hogarth - The Sick Room.jpg",
-        "18th century sickbed engraving.jpg",
-        "Marriage A-la-Mode 5, The Bagnio.jpg"
+        "William Hogarth - Marriage A-la-Mode 5.jpg",
+        "Hogarth - The Death of the Countess.jpg"
       ],
-      "search": "Hogarth sickroom 18th century medical engraving",
-      "credit": "18th-century engraving of a sickbed scene"
+      "search": "Hogarth sickroom engraving 18th century",
+      "credit": "Hogarth — sickroom scene"
     }
   },
 
   "florence": {
-    "illus_florence_arno": {
+    "illus_florence_duomo": {
       "titles": [
-        "Zocchi - Veduta del Ponte alla Carraia.jpg",
-        "Giuseppe Zocchi - View of Florence with the Arno.jpg",
-        "Florence Arno Ponte Vecchio 18th century.jpg"
+        "Giuseppe Zocchi - Veduta della Piazza del Duomo.jpg",
+        "Zocchi Firenze Duomo veduta.jpg"
       ],
-      "search": "Zocchi Firenze Arno veduta 18th century",
-      "credit": "Giuseppe Zocchi — Vedute di Firenze"
+      "search": "Zocchi Firenze Duomo piazza veduta",
+      "credit": "Giuseppe Zocchi — Veduta della Piazza del Duomo (Vedute di Firenze, 1744)"
+    },
+    "illus_florence_palazzo": {
+      "titles": [
+        "Giuseppe Zocchi - Palazzo Pitti.jpg",
+        "Zocchi Veduta del Palazzo Pitti.jpg"
+      ],
+      "search": "Zocchi Firenze palazzo Pitti veduta",
+      "credit": "Giuseppe Zocchi — Veduta del Palazzo Pitti"
+    },
+    "illus_florence_gallery": {
+      "titles": [
+        "Tribuna degli Uffizi Zoffany.jpg",
+        "Johann Zoffany - The Tribuna of the Uffizi.jpg"
+      ],
+      "search": "Zoffany Tribuna Uffizi 18th century",
+      "credit": "Johann Zoffany — The Tribuna of the Uffizi (1772–77)"
+    },
+    "illus_florence_market": {
+      "titles": [
+        "Giuseppe Zocchi - Mercato Vecchio.jpg",
+        "Zocchi Firenze mercato.jpg"
+      ],
+      "search": "Zocchi Firenze mercato vecchio veduta",
+      "credit": "Giuseppe Zocchi — Mercato Vecchio (Vedute di Firenze)"
     }
   },
 
   "venice": {
-    "illus_venice_arrival": {
+    "illus_venice_bacino": {
       "titles": [
         "Canaletto - Bacino di San Marco.jpg",
-        "Canaletto Venice Grand Canal entrance.jpg",
-        "Carlevarijs - Veduta del Bacino di San Marco.jpg"
+        "Canaletto Venice San Marco Bacino.jpg"
       ],
-      "search": "Canaletto Venice San Marco Bacino veduta",
+      "search": "Canaletto Venice Bacino San Marco veduta",
       "credit": "Canaletto — Bacino di San Marco"
+    },
+    "illus_venice_carnival": {
+      "titles": [
+        "Pietro Longhi - The Ridotto.jpg",
+        "Longhi Venice masked figures.jpg"
+      ],
+      "search": "Pietro Longhi Venice mask bauta Ridotto",
+      "credit": "Pietro Longhi — Il Ridotto / masked figures"
+    },
+    "illus_venice_palace": {
+      "titles": [
+        "Canaletto - The Doge's Palace.jpg",
+        "Canaletto Palazzo Ducale Venezia.jpg"
+      ],
+      "search": "Canaletto Doge Palace Palazzo Ducale Venice",
+      "credit": "Canaletto — The Doge's Palace"
+    },
+    "illus_venice_murano": {
+      "titles": [
+        "Diderot Encyclopedie Verrerie glass blowing.jpg",
+        "Murano glassblowing 18th century engraving.jpg"
+      ],
+      "search": "Diderot Encyclopedie verrerie glass workshop engraving",
+      "credit": "Diderot's Encyclopédie — Verrerie (glassworks) plate"
     }
   },
 
   "paris": {
-    "illus_paris_arrival": {
+    "illus_paris_tuileries": {
       "titles": [
-        "Hubert Robert - View of Paris.jpg",
-        "Israel Silvestre - View of Paris.jpg",
-        "Augustin de Saint-Aubin - Vue de Paris.jpg"
+        "Hubert Robert - Vue du Pont Royal.jpg",
+        "Pavilion Tuileries 18th century engraving.jpg"
       ],
-      "search": "Hubert Robert Paris 18th century veduta engraving",
-      "credit": "Hubert Robert or Israel Silvestre — 18th-c. Paris"
+      "search": "Hubert Robert Paris Tuileries view 18th century",
+      "credit": "Hubert Robert — Vue de Paris"
+    },
+    "illus_paris_versailles": {
+      "titles": [
+        "Israel Silvestre - Vue de Versailles.jpg",
+        "Versailles palace 18th century engraving.jpg"
+      ],
+      "search": "Versailles palace 18th century engraving Silvestre",
+      "credit": "Israel Silvestre — Vue de Versailles"
+    },
+    "illus_paris_salon": {
+      "titles": [
+        "Anicet Lemonnier - Une soirée chez Madame Geoffrin.jpg",
+        "Lemonnier salon Madame Geoffrin.jpg"
+      ],
+      "search": "Lemonnier soirée Madame Geoffrin salon",
+      "credit": "Anicet Lemonnier — Une soirée chez Madame Geoffrin"
+    },
+    "illus_paris_voltaire": {
+      "titles": [
+        "Jean Huber - Voltaire chez lui.jpg",
+        "Voltaire Ferney engraving.jpg"
+      ],
+      "search": "Jean Huber Voltaire Ferney portrait",
+      "credit": "Jean Huber — Voltaire chez lui"
     }
   }
 }
